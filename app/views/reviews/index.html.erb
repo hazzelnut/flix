@@ -9,10 +9,13 @@
         <span class="date">
           <%= time_ago_in_words(review.created_at) %> ago
         </span>
+        <%= link_to 'Delete', [@movie, review], class: 'button',
+          data: { turbo_method: :delete } %>
+        <%= link_to 'Edit', edit_movie_review_path(@movie, review), class: 'button' %>
       </p>
       <p>
         <%= review.comment %>
       </p>
-    </li>
+
   <% end %>
 </ul>
