@@ -47,7 +47,6 @@ class UsersController < ApplicationController
 
   def require_correct_user
     @user = User.find(params[:id])
-    session[:intended_url] = request.url
     redirect_to root_url, status: :see_other unless current_user?(@user)
   end
 
