@@ -6,13 +6,32 @@
   <p>
     <%= @user.created_at.strftime('%B %Y') %>
   </p>
-    <div class="actions">
-      <% if current_user?(@user) %>
-        <%= link_to 'Edit Account', edit_user_path(@user), class: 'button edit' %>
-      <% end %>
-      <% if current_user_admin? %>
-        <%= link_to 'Delete Account', @user, class: "button delete",
-            data: { turbo_method: :delete, turbo_confirm: "Permanently delete your account!?" } %>
-      <% end %>
-    </div>
+  <div class="actions">
+    <% if current_user?(@user) %>
+      <%= link_to 'Edit Account', edit_user_path(@user), class: 'button edit' %>
+    <% end %>
+    <% if current_user_admin? %>
+      <%= link_to 'Delete Account', @user, class: "button delete",
+          data: { turbo_method: :delete, turbo_confirm: "Permanently delete your account!?" } %>
+    <% end %>
+  </div>
+  <% if @reviews.present? %>
+    <h3>Reviews</h3>
+    <% @reviews.each do |review| %>
+      <div class="review">
+        <div class="details">
+          <span class="title">
+            <%= link_to review.movie.title, review.movie %>
+          </span>
+          <%= pluralize(review.stars, 'star') %>
+          <span class="date">
+            <%= time_ago_in_words(review.created_at) %> ago
+          </span>
+          <p>
+            <%= review.comment %>
+          </p>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
 </section>

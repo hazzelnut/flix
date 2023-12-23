@@ -1,5 +1,6 @@
 class ReviewsController < ApplicationController
   before_action :set_movie
+  before_action :require_signin
 
   def index
     @reviews = @movie.reviews
@@ -11,6 +12,7 @@ class ReviewsController < ApplicationController
 
   def create
     @review = @movie.reviews.new(review_params)
+    @review.user = current_user
 
     if @review.save
       redirect_to movie_reviews_url(@movie), notice: 'Thanks for reviewing!'
@@ -42,7 +44,7 @@ class ReviewsController < ApplicationController
   private
 
   def review_params
-    params.require(:review).permit(:name, :stars, :comment)
+    params.require(:review).permit(:stars, :comment)
   end
 
   def set_movie
