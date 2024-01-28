@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
+    @user = User.not_admins
     @reviews = @user.reviews
     @favorite_movies = @user.favorite_movies
   end
