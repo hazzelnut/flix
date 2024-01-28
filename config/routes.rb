@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   # get 'movies/:id/edit' => 'movies#edit', as: 'edit_movie'
   # patch 'movies/:id' => 'movies#update'
 
+  get 'movies/filter/:filter' => 'movies#index', as: :filtered_movies
+
   resources :movies do
     resources :reviews
     resources :favorites, only: [:create, :destroy]

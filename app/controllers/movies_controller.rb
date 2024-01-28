@@ -5,7 +5,12 @@ class MoviesController < ApplicationController
 
 
   def index
-    @movies = Movie.released
+    # The send mothod allows you to dynmically call a method
+    # within the movie class. Have to be careful when
+    # doing this as it could a security vulnerability if
+    # proper checks aren't in place as a malicious actor
+    # could for example, delete all records by calling a delete method
+    @movies = Movie.send(movie_filter)
   end
 
   def show
@@ -57,5 +62,13 @@ class MoviesController < ApplicationController
     params.require(:movie)
           .permit(:title, :description, :rating, :released_on, :total_gross,
                   :director, :duration, :image_file_name, genre_ids: [])
+  end
+
+  def movie_filter
+    if params[:filter].in? %w[upcoming recent hits flops]
+      params[:filter]
+    else
+      :released
+    end
   end
 end
