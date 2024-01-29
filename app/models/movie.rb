@@ -1,4 +1,5 @@
 class Movie < ApplicationRecord
+  before_save :set_slug
 
   has_many :reviews, -> { order(created_at: :desc) }, dependent: :destroy
 
@@ -14,7 +15,9 @@ class Movie < ApplicationRecord
 
   RATINGS = %w[G PG PG-13 R NC-17].freeze
 
-  validates :title, :released_on, :duration, presence: true
+  validates :title, presence: true, uniqueness: true
+
+  validates :released_on, :duration, presence: true
 
   validates :description, length: { minimum: 25 }
 
@@ -46,5 +49,13 @@ class Movie < ApplicationRecord
 
   def average_stars_as_percent
     (average_stars / 5.0) * 100
+  end
+
+  def to_param
+    slug
+  end
+
+  def set_slug
+    self.slug = title.parameterize
   end
 end

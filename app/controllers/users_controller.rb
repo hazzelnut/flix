@@ -5,11 +5,11 @@ class UsersController < ApplicationController
   before_action :require_admin, only: [:destroy]
 
   def index
-    @users = User.all
+    @users = User.not_admins
   end
 
   def show
-    @user = User.not_admins
+    @user = User.find_by!(username: params[:id])
     @reviews = @user.reviews
     @favorite_movies = @user.favorite_movies
   end
@@ -40,7 +40,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user = User.find(params[:id])
+    @user = User.find_by!(username: params[:id])
     @user.destroy
     session[:user_id] = nil
     redirect_to movies_url, status: :see_other,
@@ -50,7 +50,7 @@ class UsersController < ApplicationController
   private
 
   def require_correct_user
-    @user = User.find(params[:id])
+    @user = User.find_by!(username: params[:id])
     redirect_to root_url, status: :see_other unless current_user?(@user)
   end
 
